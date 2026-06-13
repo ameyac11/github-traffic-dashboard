@@ -400,7 +400,43 @@ hr { border: none; border-top: 1px solid #21262d; margin: 1rem 0; }
 ::-webkit-scrollbar-track { background: #0d1117; }
 ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+/* GitHub corner button */
+.github-corner-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    color: #c9d1d9 !important;
+    text-decoration: none !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 999999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+}
+.github-corner-btn:hover {
+    background: #30363d;
+    border-color: #8b949e;
+    color: #e6edf3 !important;
+    transform: translateY(-1px);
+}
+.github-corner-btn svg {
+    fill: currentColor;
+}
 </style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+<a href="{GITHUB_REPO}" target="_blank" rel="noopener noreferrer" class="github-corner-btn">
+    {GITHUB_LOGO}<span>Star on GitHub</span>
+</a>
 """, unsafe_allow_html=True)
 
 

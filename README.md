@@ -1,5 +1,7 @@
 # 🚀 GitHub Traffic Dashboard
 
+![GitHub Traffic Dashboard](assets/gittracker_thumnail1.png)
+
 A local-only GitHub traffic analytics tool with two modes:
 - **🖥️ Web UI** — Beautiful Streamlit dashboard (recommended)
 - **⌨️ CLI** — Terminal output + CSV export
