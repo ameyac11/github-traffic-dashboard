@@ -64,7 +64,7 @@ pip install -r requirements.txt
 4. Select the **`repo`** scope — required to read traffic data for private repositories
 5. Click **Generate token** and **copy it immediately**
 
-> **Security note:** Your token is used locally only. It is never sent to any external server by this tool.
+> **🔒 Security note:** For the security of your GitHub tokens, this dashboard is intentionally kept local-only and not deployed to the web. Your token is completely safe, used only on your machine, and never sent to any external server.
 
 ---
 
