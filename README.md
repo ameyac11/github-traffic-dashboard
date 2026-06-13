@@ -11,7 +11,6 @@ View 14-day views, clones, referrers, and popular paths for **all** your reposit
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Built%20with-Streamlit-ff4b4b)](https://streamlit.io/)
-[![GitHub Stars](https://img.shields.io/github/stars/ameyac11/github-traffic-viewer?style=social)](https://github.com/ameyac11/github-traffic-viewer/stargazers)
 
 **🔴 Try the live demo:** [git-traffic-viewer.streamlit.app](https://git-traffic-viewer.streamlit.app/)
 
