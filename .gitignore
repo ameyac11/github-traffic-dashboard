@@ -5,3 +5,9 @@ __pycache__/
 .venv/
 venv/
 env/
+
+# Build and cache directories
+build/
+dist/
+*.egg-info/
+.pytest_cache/
