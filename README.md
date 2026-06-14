@@ -3,9 +3,10 @@
 # 🚀 GitHub Traffic Dashboard 📊
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
+[![PyPI](https://img.shields.io/pypi/v/github-traffic-monitor)](https://pypi.org/project/github-traffic-monitor/)
 [![Streamlit](https://img.shields.io/badge/Built%20with-Streamlit-ff4b4b)](https://streamlit.io/)
-[![Automation](https://img.shields.io/badge/Automation-Companion%20App-green?logo=github-actions)](https://github.com/ameyac11/Github_Traffic_Automation)
+[![Automation](https://img.shields.io/badge/Automation-Companion%20App-green?logo=github-actions)](https://github.com/ameyac11/github-traffic-monitor-automation)
 
 **Beautiful GitHub traffic analytics for all your repositories — public and private.** 📈
 
@@ -33,7 +34,7 @@ View 14-day views, clones, referrers, and popular paths for **all** your reposit
 
 **Don't lose your data!** We built a companion automation tool that runs silently in the background every 13 days using GitHub Actions to fetch and save your data permanently. 
 
-👉 **[Set up GitHub Traffic Automation here](https://github.com/ameyac11/Github_Traffic_Automation)** (It takes literally 2 minutes to set up!)
+👉 **[Set up GitHub Traffic Automation here](https://github.com/ameyac11/github-traffic-monitor-automation)** (It takes literally 2 minutes to set up!)
 
 Once you have your automated data saved, you can seamlessly plug it right into this dashboard to visualize your beautiful, long-term historical charts.
 
@@ -56,115 +57,62 @@ Once you have your automated data saved, you can seamlessly plug it right into t
 
 ---
 
-## 🛠️ Setup (One-Time)
+## 🛠️ Installation
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/ameyac11/github-traffic-viewer.git
-cd github-traffic-viewer
-```
-
-### 2. Create a Virtual Environment (Recommended)
-
-**Windows:**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-**macOS / Linux:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
+You can install the package directly from PyPI.
 
 ```bash
-pip install -r requirements.txt
+# Basic CLI installation
+pip install github-traffic-monitor
+
+# Installation with Dashboard UI support
+pip install "github-traffic-monitor[dashboard]"
 ```
 
-### 4. Generate a GitHub Personal Access Token (PAT)
+### Generating a GitHub Personal Access Token (PAT)
+To use either the CLI or Dashboard, you'll need a GitHub token.
 
 1. Go to **[GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens)**
 2. Click **Generate new token (classic)**
-3. Give it a name (e.g. *Traffic Dashboard*)
-4. Select the **`repo`** scope — required to read traffic data for private repositories
-5. Click **Generate token** and **copy it immediately**
+3. Select the **`repo`** scope — required to read traffic data for private repositories
+4. Click **Generate token** and **copy it immediately**
 
-> **🔒 Security Note:**
-> 
-> **If running locally:** Your token is completely safe, used only on your machine, and never sent to any external server. It is kept only in memory during your active session.
-> 
-> **If using a deployed web version:** Please ensure you **delete/revoke your GitHub Personal Access Token** from GitHub immediately after fetching your report. While the app does not save your token anywhere (it is cleared immediately upon refreshing or closing the tab), deleting the token from GitHub is the safest practice.
+> **🔒 Security Note:** Your token is completely safe, used only on your machine, and never sent to any external server. 
 
 ---
 
 ## 🖥️ Run: Streamlit Dashboard (Recommended)
 
+If you installed with the `[dashboard]` extra, you can launch the beautiful web UI with a single command:
+
 ```bash
-streamlit run streamlit_app.py
+github-traffic-monitor dashboard
 ```
 
-The app opens automatically in your browser at `http://localhost:8501`.
-
-1. Paste your GitHub token into the sidebar
-2. Click **Connect to GitHub**
-3. Click **Fetch Traffic Data**
-4. Browse charts, explore per-repo details, and download the CSV
+The app opens automatically in your browser at `http://localhost:8501`. Paste your GitHub token into the sidebar and explore!
 
 ---
 
 ## ⌨️ Run: CLI (Terminal Mode)
 
-The CLI reads your token from a `.env` file or an environment variable.
+If you just want terminal output or to export CSV files, you can use the CLI commands.
 
-**Option A — `.env` file (recommended):**
-
+**Fetch data and print to terminal:**
 ```bash
-# Copy the template
-cp .env.example .env
-
-# Open .env and add your token
-# GITHUB_TOKEN=ghp_your_token_here
+github-traffic-monitor fetch --token ghp_your_token_here
 ```
 
-Then run:
+**Fetch data and save to a specific CSV file:**
 ```bash
-python github_traffic_fetch.py
+github-traffic-monitor fetch --token ghp_your_token_here --output my_report.csv
 ```
 
-**Option B — pass token directly:**
+**Sync data (Append today's traffic to historical monthly CSVs):**
 ```bash
-python github_traffic_fetch.py --token ghp_your_token_here
+github-traffic-monitor sync --token ghp_your_token_here --dir ./data
 ```
 
-**Option C — custom output filename:**
-```bash
-python github_traffic_fetch.py --output my_report.csv
-```
-
-**View all options:**
-```bash
-python github_traffic_fetch.py --help
-```
-
----
-
-## 📁 Project Structure
-
-```
-GitHub_Traffic/
-├── streamlit_app.py        # 🖥️  Streamlit dashboard (self-contained)
-├── github_traffic_fetch.py # ⌨️  CLI script with reusable API functions
-├── requirements.txt        # Python dependencies
-├── .env.example            # Token template (safe to commit)
-├── .env                    # Your actual token (git-ignored!)
-├── .gitignore              # Ignores .env and CSV exports
-├── LICENSE                 # Apache 2.0
-└── README.md               # This file
-```
+You can also store your token in a `.env` file as `GITHUB_TOKEN=ghp_...` so you don't have to type it out every time.
 
 ---
 
@@ -190,15 +138,38 @@ GitHub_Traffic/
 
 ## ⚠️ Requirements
 
-- **Python 3.10+**
+- **Python 3.9+**
 - A GitHub account with at least one repository
 - A GitHub Personal Access Token with the `repo` scope
 
 ---
 
+## 🛠️ Development Install
+
+```bash
+git clone https://github.com/ameyac11/github-traffic-monitor
+cd github-traffic-monitor
+pip install -e ".[dev,dashboard]"
+```
+
+## 🧪 Running Tests
+
+```bash
+pip install pytest
+pytest
+```
+
+---
+
+## 📜 CHANGELOG
+
+[See the CHANGELOG](CHANGELOG.md)
+
+---
+
 ## 🌟 Show Your Support
 
-If you find this project useful, please consider giving it a ⭐ on [GitHub](https://github.com/ameyac11/github-traffic-viewer)! It helps more people discover the tool.
+If you find this project useful, please consider giving it a ⭐ on [GitHub](https://github.com/ameyac11/github-traffic-monitor)! It helps more people discover the tool.
 
 ---
 

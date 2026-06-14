@@ -1,5 +1,7 @@
 import pandas as pd
 
+# This script reformats raw monthly CSV uploads so the dashboard can read them properly.
+
 def process_uploaded_csv(uploaded_file) -> pd.DataFrame:
     """Process an uploaded monthly traffic CSV file into the format expected by the dashboard."""
     raw_df = pd.read_csv(uploaded_file)

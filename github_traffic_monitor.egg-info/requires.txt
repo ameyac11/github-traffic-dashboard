@@ -1,0 +1,10 @@
+requests
+pandas
+python-dotenv
+
+[dashboard]
+streamlit>=1.35.0
+
+[dev]
+pytest>=8.0.0
+pytest-cov>=5.0.0

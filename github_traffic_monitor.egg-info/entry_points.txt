@@ -1,0 +1,2 @@
+[console_scripts]
+github-traffic-monitor = github_traffic.cli:main
