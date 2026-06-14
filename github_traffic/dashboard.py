@@ -55,17 +55,7 @@ html, body, [class*="css"], .stApp {
     color: #c9d1d9;
 }
 
-/* Hide Streamlit deploy button and branding — keep sidebar toggle visible */
-#MainMenu                            { visibility: hidden; }
-footer                               { visibility: hidden; }
-header, [data-testid="stHeader"]     { display: none !important; }
-[data-testid="stDecoration"]         { display: none !important; }
-[data-testid="stStatusWidget"]       { display: none !important; }
-[data-testid="stHeaderDeployButton"],
-[data-testid="stAppDeployButton"],
-.stDeployButton,
-.stAppDeployButton              { display: none !important; visibility: hidden !important; }
-[data-testid="stElementToolbar"]     { display: none !important; }
+/* Hide Streamlit deploy button and branding — removed for debugging */
 
 /* Sidebar background */
 
@@ -310,21 +300,7 @@ div[data-testid="InputInstructions"] {
     border-color: #8b949e !important;
 }
 
-/* Hide Streamlit stale ghost widgets (faded duplicates during reruns) */
-.stale,
-[data-testid="stElementContainer"].stale,
-div[data-testid="stVerticalBlock"].stale,
-section[data-testid="stSidebar"] [style*="opacity: 0.5"],
-section[data-testid="stSidebar"] [style*="opacity:0.5"],
-section[data-testid="stSidebar"] [style*="opacity: 0.33"],
-section[data-testid="stSidebar"] [style*="opacity:0.33"] {
-    display: none !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
+/* Hide Streamlit stale ghost widgets - removed for debugging */
 
 /* Metric cards */
 [data-testid="metric-container"] {
@@ -523,9 +499,7 @@ div[data-testid="stRadio"] label:nth-child(2) [data-testid="stMarkdownContainer"
     color: #c9d1d9 !important;
 }
 
-div[data-testid="stVerticalBlock"] > div:has(> div > div > .landing-spacer) {
-    padding: 0 !important; margin: 0 !important; height: 0 !important;
-}
+/* Spacer CSS removed for debugging */
 </style>
 """, unsafe_allow_html=True)
 
