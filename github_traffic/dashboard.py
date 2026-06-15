@@ -664,50 +664,6 @@ DISPLAY_COLS = [
 ]
 
 
-def _normalize_dashboard_frame(frame: pd.DataFrame) -> pd.DataFrame:
-    """Ensure the dashboard always receives the columns it expects."""
-    normalized = frame.copy()
-    defaults = {
-        "Repository": "",
-        "Private": False,
-        "Stars": 0,
-        "Forks": 0,
-        "Total Views": 0,
-        "Unique Visitors": 0,
-        "Total Clones": 0,
-        "Unique Cloners": 0,
-        "Top Referrer": "",
-        "Top Referrer Views": 0,
-        "Top Path": "",
-        "Top Path Views": 0,
-        "_daily_views": [],
-        "_daily_clones": [],
-        "_referrers": [],
-        "_paths": [],
-    }
-    for column, default_value in defaults.items():
-        if column not in normalized.columns:
-            normalized[column] = default_value
-
-    normalized["Repository"] = normalized["Repository"].fillna("").astype(str)
-    normalized["Private"] = normalized["Private"].fillna(False).astype(bool)
-
-    numeric_cols = [
-        "Stars",
-        "Forks",
-        "Total Views",
-        "Unique Visitors",
-        "Total Clones",
-        "Unique Cloners",
-        "Top Referrer Views",
-        "Top Path Views",
-    ]
-    for column in numeric_cols:
-        normalized[column] = pd.to_numeric(normalized[column], errors="coerce").replace([float("inf"), float("-inf")], 0).fillna(0)
-
-    return normalized
-
-
 def _search_filter_frame(frame: pd.DataFrame, query: str) -> pd.DataFrame:
     q = query.strip()
     if not q:
@@ -764,7 +720,20 @@ def _safe_max(series: pd.Series) -> int:
 
 def _render_dashboard_content(df: pd.DataFrame, search: str, top_n: int) -> None:
     """Render metrics, charts, tables, and repo detail for the current filter."""
-    active_df = _normalize_dashboard_frame(_search_filter_frame(df, search))
+    active_df = _search_filter_frame(df, search)
+    numeric_cols = [
+        "Stars",
+        "Forks",
+        "Total Views",
+        "Unique Visitors",
+        "Total Clones",
+        "Unique Cloners",
+        "Top Referrer Views",
+        "Top Path Views",
+    ]
+    for column in numeric_cols:
+        if column in active_df.columns:
+            active_df[column] = pd.to_numeric(active_df[column], errors="coerce").replace([float("inf"), float("-inf")], 0).fillna(0)
 
     st.markdown("<p style='font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8b949e;margin:0.5rem 0 0.5rem 0;'>Overview — Last 14 Days</p>", unsafe_allow_html=True)
 
@@ -1222,20 +1191,32 @@ CSV processed locally. No data is stored or uploaded.
     st.stop()
 
 
+# ── Fetch first — no sidebar so we can show user avatar in center ──────────────
+if not st.session_state.fetched or st.session_state.df is None:
+    _, center_col, _ = st.columns([1, 1.5, 1])
+    with center_col:
+        st.markdown(f"""
+        <div style="text-align:center; padding-top: 1.5rem; margin-bottom: 1.5rem;">
+            <img src="{st.session_state.avatar_url}" width="80" style="border-radius:50%;border:3px solid #30363d;margin-bottom:1rem;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+            <h2 style="color:#e6edf3;margin:0 0 0.25rem 0;">Welcome, {st.session_state.name}!</h2>
+            <p style="color:#8b949e;font-size:0.9rem;margin:0;">@{st.session_state.username}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        _fetch_traffic_data()
+    st.stop()
+
+
 # ── Full dashboard after data is loaded ───────────────────────────────────────
 st.markdown("<style>[data-testid='stSidebar'] {display: none !important;} [data-testid='collapsedControl'] {display: none !important;}</style>", unsafe_allow_html=True)
 
 _render_dashboard_hero()
 
-try:
-    df = st.session_state.df
-    if df is None or df.empty:
-        st.warning("No repositories found, or no traffic data available for this token.")
-        st.stop()
+df = st.session_state.df
+if df is None or df.empty:
+    st.warning("No repositories found, or no traffic data available for this token.")
+    st.stop()
 
-    search, top_n = _render_dashboard_toolbar(df)
-    _render_dashboard_content(df, search, top_n)
-except Exception as exc:
-    st.error("The dashboard hit an unexpected render error. Please refresh and try again.")
-    st.exception(exc)
+search, top_n = _render_dashboard_toolbar(df)
+_render_dashboard_content(df, search, top_n)
 
