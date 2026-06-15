@@ -1,3 +1,7 @@
+"""
+cli.py
+This is the main brain of your app where all terminal commands come to life!
+"""
 import argparse
 import sys
 import os
@@ -78,7 +82,7 @@ def main():
     sync_parser.add_argument("-t", "--token", help="GitHub PAT")
     sync_parser.add_argument("--dir", help="Directory containing monthly CSVs", default="data")
 
-    dashboard_parser = subparsers.add_parser("dashboard", help="Launch the Streamlit dashboard")
+    dashboard_parser = subparsers.add_parser("dashboard", help="Launch the React Dashboard")
 
     args = parser.parse_args()
 
@@ -87,9 +91,18 @@ def main():
         sys.exit(1)
     
     if args.command == "dashboard":
-        print("Starting Streamlit Dashboard...")
-        dashboard_script = os.path.join(os.path.dirname(__file__), "dashboard.py")
-        os.system(f"streamlit run \"{dashboard_script}\"")
+        print("\n🚀 Starting Gitlytics Local Web Dashboard...")
+        print("🌐 You can view your dashboard at: http://127.0.0.1:8000")
+        print("Press CTRL+C to quit.\n")
+        try:
+            import uvicorn
+            from github_traffic.api import app
+        except ImportError:
+            print("  ❌ Dashboard dependencies not installed.")
+            print("     Install them with: pip install \"github-traffic-monitor[dashboard]\"")
+            sys.exit(1)
+            
+        uvicorn.run(app, host="127.0.0.1", port=8000, log_level="warning")
         return
 
     # Both fetch and sync need token

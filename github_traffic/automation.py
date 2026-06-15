@@ -1,3 +1,7 @@
+"""
+automation.py
+This file silently backs up your traffic data in the background so you never lose it!
+"""
 import os
 import json
 import csv

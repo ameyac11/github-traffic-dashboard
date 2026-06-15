@@ -1,1 +1,4 @@
-# Initializes the github_traffic package
+"""
+__init__.py
+The front door to the gitlytics package, telling Python this is a module!
+"""

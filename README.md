@@ -1,12 +1,13 @@
 <div align="center">
 
-# 🚀 GitHub Traffic Monitor 📊
+# Gitlytics
+## 🚀 GitHub Traffic Monitor 📊
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
-[![PyPI](https://img.shields.io/pypi/v/github-traffic-monitor?color=blue)](https://pypi.org/project/github-traffic-monitor/)
-[![Streamlit](https://img.shields.io/badge/Built%20with-Streamlit-ff4b4b)](https://streamlit.io/)
-[![Automation](https://img.shields.io/badge/Automation-Companion%20App-green?logo=github-actions)](https://github.com/ameyac11/github-traffic-monitor-automation)
+[![PyPI](https://img.shields.io/pypi/v/gitlytics?color=blue)](https://pypi.org/project/gitlytics/)
+[![React](https://img.shields.io/badge/UI-React-61dafb?logo=react)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
 
 **Beautiful GitHub traffic analytics for all your repositories — public and private.** 📈
 
@@ -16,10 +17,15 @@ Please consider giving this project a ⭐ if you find it helpful!
 
 ---
 
-**🔴 Try the live demo:** [git-traffic-monitor.streamlit.app](https://git-traffic-monitor.streamlit.app/)
+> **⚠️ NOTE: NAME AND TECH STACK UPGRADE!**
+> This library was formerly known as `github-traffic-monitor`. We have officially rebranded to **`gitlytics`**! 
+>
+> In addition to the name change, we have migrated away from Streamlit. The dashboard is currently a base version working on a new and better **React + Vite** architecture, powered by a **FastAPI** backend!
+
+---
 
 A local-only GitHub traffic analytics tool with two modes:
-- **🖥️ Web UI** — Beautiful Streamlit dashboard (recommended)
+- **🖥️ Web UI** — Beautiful React + FastAPI dashboard (recommended)
 - **⌨️ CLI** — Terminal output + CSV export
 
 View 14-day views, clones, referrers, and popular paths for **all** your repositories. Everything runs on your machine. Your token never leaves your device.
@@ -42,16 +48,16 @@ Once you have your automated data saved, you can seamlessly plug it right into t
 
 ## ✨ Features
 
-| Feature | Streamlit UI | CLI |
+| Feature | React UI | CLI |
 |---|:---:|:---:|
 | **Dual Mode Interface** (Live API & CSV Upload) | ✅ | ❌ |
 | Token input (no hardcoding) | ✅ | ✅ |
 | Upload & visualize historical CSV data | ✅ | ❌ |
 | Summary metrics (views, clones, stars, forks) | ✅ | ✅ |
-| Bar & line charts per repository | ✅ | ❌ |
+| Animated Area & Pie charts per repository | ✅ | ❌ |
 | Per-repo daily views & clones chart | ✅ | ✅ |
 | Top referrers & popular paths | ✅ | ✅ |
-| Searchable repository list | ✅ | ❌ |
+| Expandable repository list | ✅ | ❌ |
 | Export to CSV | ✅ (download button) | ✅ (file) |
 | Runs 100% locally | ✅ | ✅ |
 
@@ -63,10 +69,10 @@ You can install the package directly from PyPI.
 
 ```bash
 # Basic CLI installation
-pip install github-traffic-monitor
+pip install gitlytics
 
 # Installation with Dashboard UI support
-pip install "github-traffic-monitor[dashboard]"
+pip install "gitlytics[dashboard]"
 ```
 
 ### Generating a GitHub Personal Access Token (PAT)
@@ -81,15 +87,15 @@ To use either the CLI or Dashboard, you'll need a GitHub token.
 
 ---
 
-## 🖥️ Run: Streamlit Dashboard (Recommended)
+## 🖥️ Run: React Dashboard (Recommended)
 
 If you installed with the `[dashboard]` extra, you can launch the beautiful web UI with a single command:
 
 ```bash
-github-traffic-monitor dashboard
+gitlytics dashboard
 ```
 
-The app opens automatically in your browser at `http://localhost:8501`. Paste your GitHub token into the sidebar and explore!
+The server opens automatically in your terminal and you can view your dashboard at `http://localhost:8000`.
 
 ---
 
@@ -99,17 +105,17 @@ If you just want terminal output or to export CSV files, you can use the CLI com
 
 **Fetch data and print to terminal:**
 ```bash
-github-traffic-monitor fetch --token ghp_your_token_here
+gitlytics fetch --token ghp_your_token_here
 ```
 
 **Fetch data and save to a specific CSV file:**
 ```bash
-github-traffic-monitor fetch --token ghp_your_token_here --output my_report.csv
+gitlytics fetch --token ghp_your_token_here --output my_report.csv
 ```
 
 **Sync data (Append today's traffic to historical monthly CSVs):**
 ```bash
-github-traffic-monitor sync --token ghp_your_token_here --dir ./data
+gitlytics sync --token ghp_your_token_here --dir ./data
 ```
 
 You can also store your token in a `.env` file as `GITHUB_TOKEN=ghp_...` so you don't have to type it out every time.
@@ -158,12 +164,6 @@ pip install -e ".[dev,dashboard]"
 pip install pytest
 pytest
 ```
-
----
-
-## 📜 CHANGELOG
-
-[See the CHANGELOG](CHANGELOG.md)
 
 ---
 
