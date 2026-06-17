@@ -40,9 +40,6 @@ jobs:
         run: |
           npm ci
           npm run build
-          # The Python module expects the built frontend inside gitlytics/static/
-          mkdir -p ../src/gitlytics/static
-          cp -r dist/* ../src/gitlytics/static/
 
       - name: Build package
         run: python -m build
