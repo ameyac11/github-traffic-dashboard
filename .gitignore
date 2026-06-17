@@ -23,4 +23,4 @@ htmlcov/
 *.log
 
 # Built frontend assets
-src/gitlytics/static/
+src/gitlytics/static
