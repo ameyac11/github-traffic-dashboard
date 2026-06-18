@@ -8,7 +8,7 @@ import json
 
 # Single source of truth for the package version.
 # Mirrors the version in pyproject.toml — keep them in sync.
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 # Import the internal building blocks — users never call these directly
 from .core import fetch_traffic_data, print_repo_table

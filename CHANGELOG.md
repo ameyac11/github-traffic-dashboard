@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5] - 2026-06-18
+### Changed
+- Updated the primary project logo to a newer, higher-resolution version across the dashboard and README.
+
+### Fixed
+- Addressed minor bugs and visual inconsistencies in the dashboard interface to improve overall user experience.
+
 ## [0.1.4] - 2026-06-17
 ### Added
 - Added official documentation portal links (`docs.gitlytics.dev`) to PyPI metadata and README.
