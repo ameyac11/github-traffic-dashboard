@@ -25,6 +25,7 @@ _GITHUB_BASE_HEADERS = {
 _PUBLIC_HEADERS = dict(_GITHUB_BASE_HEADERS)
 _MAX_RELEASE_PAGES = 10      # hard cap when walking /releases
 _MAX_PR_PAGES = 10           # hard cap when walking /pulls
+_MAX_COMMIT_PAGES = 50       # hard cap when counting /commits (50 * 100 = 5000)
 _PER_PAGE = 100              # request size for paginated endpoints
 
 
@@ -254,13 +255,28 @@ def get_deep_repo_stats(token: str, full_name: str) -> dict:
     }
 
     # Commit activity — GitHub computes this async and returns 202 when not ready.
-    # total_commits here is the trailing 52-week (12-month) sum, NOT lifetime.
+    # NOTE: stats/commit_activity only reports the trailing 52-week window, so for
+    # repos where the user expects to see lifetime history we count via
+    # /repos/{full_name}/commits?per_page=100 and walk pages. GitHub hard-caps
+    # /commits at ~1000 results on a single unauthenticated/traffic endpoint, so
+    # the lifetime count returned here is the lifetime visible to the API.
     ca_url = f"{BASE}/repos/{full_name}/stats/commit_activity"
     ca_data, status = _safe_get(ca_url, h)
     if status == 202:
         logger.info(f"Commit activity not ready yet (202) for {full_name}; will populate on next fetch.")
-    if isinstance(ca_data, list):
+    if isinstance(ca_data, list) and ca_data:
         stats["total_commits"] = sum(week.get("total", 0) for week in ca_data)
+    else:
+        # Fall back to a lifetime count when stats/commit_activity is empty or
+        # not yet computed (202 / empty list). Walking /commits is slower but
+        # always returns the real lifetime history for repos under ~10k commits.
+        commits_url = f"{BASE}/repos/{full_name}/commits"
+        try:
+            stats["total_commits"] = _walk_paginated_count(
+                commits_url, h, {"per_page": _PER_PAGE}, _MAX_COMMIT_PAGES
+            )
+        except Exception as exc:
+            logger.warning(f"Could not fetch commit count for {full_name}: {exc}")
 
     # Open PRs — walk pages because GitHub's /pulls endpoint doesn't return a total.
     pr_url = f"{BASE}/repos/{full_name}/pulls"
