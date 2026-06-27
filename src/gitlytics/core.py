@@ -408,6 +408,8 @@ def fetch_star_history(owner: str, repo: str, token: str | None = None) -> list[
     if status in (403, 429):
         # GitHub's rate-limit guard returns 403 with a 'rate limit' message in body.
         raise GitHubRateLimitError("GitHub rate limit reached, try again later")
+    if status == 404:
+        raise StarHistoryFetchError("user or repo does not exist")
     if status != 200 or not isinstance(meta, dict):
         raise StarHistoryFetchError(f"Failed to fetch repo metadata (HTTP {status})")
     total_stars = int(meta.get("stargazers_count", 0) or 0)

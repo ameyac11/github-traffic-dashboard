@@ -8,6 +8,7 @@ import os
 import shutil
 import time as _time
 import uuid
+from collections import OrderedDict
 from pathlib import Path
 
 import pandas as pd
@@ -55,8 +56,13 @@ app.add_middleware(
 )
 
 
-_auth_cache: dict = {}  # sha256_prefix -> (valid, username, expires_at)
+# In-process short-term cache for token validation. Cleared when the
+# Python process exits — same lifetime as the CLI / FastAPI worker.
+# OrderedDict + insert-order eviction gives us a bounded LRU without
+# pulling in functools.lru_cache (which can't be cleared on TTL).
+_auth_cache: "OrderedDict[str, tuple]" = OrderedDict()
 _AUTH_CACHE_TTL = 300  # 5 minutes
+_AUTH_CACHE_MAX = 256  # cap entries so a long-running worker can't grow unbounded
 
 # Hard cap on CSV upload size — prevents DoS via /api/upload-csv.
 _MAX_UPLOAD_BYTES = 25 * 1024 * 1024
@@ -74,12 +80,18 @@ def _validate_token_cached(token: str):
     from gitlytics.core import validate_token as _validate_token
     key = hashlib.sha256(token.encode()).hexdigest()[:16]
     now = _time.time()
-    if key in _auth_cache:
-        valid, username, expires = _auth_cache[key]
+    cached = _auth_cache.get(key)
+    if cached is not None:
+        valid, username, expires = cached
         if now < expires:
+            # Refresh insertion order so an active key isn't evicted FIFO-style.
+            _auth_cache.move_to_end(key)
             return valid, username
     valid, username = _validate_token(token)
     _auth_cache[key] = (valid, username, now + _AUTH_CACHE_TTL)
+    _auth_cache.move_to_end(key)
+    while len(_auth_cache) > _AUTH_CACHE_MAX:
+        _auth_cache.popitem(last=False)
     return valid, username
 
 
